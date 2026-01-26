@@ -1,12 +1,22 @@
 import type { Review } from "../types/menu-review-types";
 
+import { getToken } from "../auth/storage";
+
 const API_BASE = "http://localhost:9999";
 
+function authHeaders(): Record<string, string> {
+  const t = getToken();
+  const h: Record<string, string> = {};
+  if (t) h.Authorization = `Bearer ${t}`;
+  return h;
+}
+
 export default async function fetchReviews(
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ): Promise<Review[]> {
   const res = await fetch(`${API_BASE}/review`, {
     signal,
+    headers: { ...authHeaders() },
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "");
@@ -22,7 +32,7 @@ export async function createReview(payload: {
 }): Promise<Review> {
   const res = await fetch(`${API_BASE}/review`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...authHeaders() },
     body: JSON.stringify(payload),
   });
   if (!res.ok) {
@@ -34,6 +44,7 @@ export async function createReview(payload: {
 export async function deleteReview(id: string): Promise<void> {
   const res = await fetch(`${API_BASE}/review/${id}`, {
     method: "DELETE",
+    headers: { ...authHeaders() },
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "");
