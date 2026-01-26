@@ -7,6 +7,7 @@ import type {
 import fetchReview, { createReview, deleteReview } from "../api/review";
 import Stars from "../components/Stars";
 import { fetchMenu, fetchUsers, type IdName } from "../api/lookup";
+import { useAuth } from "../auth/AuthContext";
 
 function getUserName(u: Review["user"]) {
   if (u && typeof u === "object") {
@@ -32,7 +33,7 @@ type NewReview = {
 };
 
 export default function Review() {
-
+  const { token } = useAuth();
 
   const [data, setData] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
@@ -86,7 +87,10 @@ export default function Review() {
   const onCreate = async (e: React.FormEvent) => {
     e.preventDefault();
 
-
+    if (!token) {
+      alert("Vui lòng đăng nhập để review");
+      return;
+    }
 
     if (!form.user || !form.item || form.rating < 1 || form.rating > 5) {
       alert("Nhập user, item (ObjectId) và rating (1..5)");
@@ -126,9 +130,10 @@ export default function Review() {
   };
 
   const onDelete = async (id: string) => {
-
-
-    
+    if (!token) {
+      alert("Vui lòng đăng nhập để xóa review");
+      return;
+    }
     if (!confirm("Xoá review này?")) return;
     try {
       await deleteReview(id);
@@ -148,6 +153,12 @@ export default function Review() {
       <header className="header">
         <h1 className="title">Reviews</h1>
       </header>
+
+      {!token && (
+        <div className="notice">
+          Bạn đang ở chế độ xem. Hãy đăng nhập để xử lý review.
+        </div>
+      )}
 
       {/* Form tạo mới */}
       <form className="card" onSubmit={onCreate} style={{ marginBottom: 16 }}>
@@ -204,7 +215,11 @@ export default function Review() {
             onChange={(e) => setForm({ ...form, comment: e.target.value })}
             disabled={formDisabled}
           />
-          <button className="btn primary" type="submit" disabled={formDisabled}>
+          <button
+            className="btn primary"
+            type="submit"
+            disabled={!token}
+            title={!token ? "Đăng nhập để xóa" : "Delete"}>
             {submitting ? "Creating…" : "Create"}
           </button>
         </div>
