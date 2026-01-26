@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../auth/AuthContext";
 
 export default function NavBar() {
+  const { token, email, logout } = useAuth();
   return (
     <nav className="nav">
       <div className="navBrand">My FastFood Application</div>
@@ -23,14 +25,14 @@ export default function NavBar() {
           Chat
         </NavLink>
 
-        {/* { (
+        {token ? (
           <>
             <span className="navLink" style={{ cursor: "default" }}>
-              {#}
+              {email}
             </span>
             <button
               className="navLink"
-              onClick={#}
+              onClick={logout}
               style={{ border: "none" }}>
               Logout
             </button>
@@ -52,7 +54,7 @@ export default function NavBar() {
               Register
             </NavLink>
           </>
-        )} */}
+        )}
       </div>
     </nav>
   );
