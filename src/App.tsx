@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import { AuthProvider } from "./auth/AuthContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ChatPage from "./pages/Chat";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/review" element={<Review />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/chat" element={<ChatPage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
