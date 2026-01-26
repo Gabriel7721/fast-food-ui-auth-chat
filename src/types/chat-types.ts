@@ -15,3 +15,5 @@ export type ChatNewPayload = {
   type: "chat.new";
   msg: ChatMessage;
 };
+
+export type Incoming = HelloPayload | ChatNewPayload;

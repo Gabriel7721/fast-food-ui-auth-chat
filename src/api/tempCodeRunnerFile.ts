@@ -5,9 +5,7 @@ const WS_BASE = "ws://localhost:7777/chat";
 
 export function useChatSocket(token: string | null, email: string | null) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [status, setStatus] = useState<
-    "idle" | "connecting" | "open" | "closed"
-  >("idle");
+  const [status, setStatus] = useState<"idle" | "connecting" | "open" | "closed">("idle");
   const [error, setError] = useState<string | null>(null);
 
   const socketRef = useRef<WebSocket | null>(null);
@@ -29,8 +27,8 @@ export function useChatSocket(token: string | null, email: string | null) {
           typeof ev.data === "string" ? ev.data : String(ev.data),
         ) as Incoming;
 
-        if (data.type === "Websocket is connected successfully") {
-          setMessages([...data.chat_history].sort((a, b) => a.at - b.at));
+        if (data.type === "hello") {
+          setMessages([...data.recent].sort((a, b) => a.at - b.at));
         } else {
           setMessages((prev) => [...prev, data.msg]);
         }
