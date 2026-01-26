@@ -25,7 +25,7 @@ async function handle<T>(res: Response, label: string): Promise<T> {
  * @param signal AbortSignal (tuỳ chọn)
  */
 export async function fetchUsers(signal?: AbortSignal): Promise<IdName[]> {
-  const res = await fetch(`${API_BASE}/auth/users`, {
+  const res = await fetch(`${API_BASE_AUTH}/auth/users`, {
     signal,
     headers: { ...authHeaders() },
   });
