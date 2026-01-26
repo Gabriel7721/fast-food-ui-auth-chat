@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import type { PopulatedMenuItem, PopulatedUser, Review } from "../data/types";
+import type {
+  PopulatedMenuItem,
+  PopulatedUser,
+  Review,
+} from "../types/menu-review-types";
 import fetchReview, { createReview, deleteReview } from "../api/review";
 import Stars from "../components/Stars";
 import { fetchMenu, fetchUsers, type IdName } from "../api/lookup";
@@ -28,6 +32,8 @@ type NewReview = {
 };
 
 export default function Review() {
+
+
   const [data, setData] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,12 +46,10 @@ export default function Review() {
   });
   const [submitting, setSubmitting] = useState(false);
 
-
   const [users, setUsers] = useState<IdName[]>([]);
   const [menus, setMenus] = useState<IdName[]>([]);
   const [loadingLookup, setLoadingLookup] = useState(true);
   const [lookupError, setLookupError] = useState<string | null>(null);
-
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -62,7 +66,6 @@ export default function Review() {
     return () => ctrl.abort();
   }, []);
 
- 
   useEffect(() => {
     const run = async () => {
       try {
@@ -83,6 +86,8 @@ export default function Review() {
   const onCreate = async (e: React.FormEvent) => {
     e.preventDefault();
 
+
+
     if (!form.user || !form.item || form.rating < 1 || form.rating > 5) {
       alert("Nhập user, item (ObjectId) và rating (1..5)");
       return;
@@ -92,7 +97,6 @@ export default function Review() {
       setSubmitting(true);
       const created = await createReview(form);
 
-    
       const u = users.find((x) => x._id === form.user);
       const m = menus.find((x) => x._id === form.item);
 
@@ -122,6 +126,9 @@ export default function Review() {
   };
 
   const onDelete = async (id: string) => {
+
+
+    
     if (!confirm("Xoá review này?")) return;
     try {
       await deleteReview(id);

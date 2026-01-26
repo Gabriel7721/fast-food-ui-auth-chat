@@ -1,4 +1,5 @@
-import type { Review } from "../data/types";
+import type { Review } from "../types/menu-review-types";
+
 const API_BASE = "http://localhost:9999";
 
 export default async function fetchReviews(

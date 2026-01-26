@@ -1,18 +1,7 @@
 // import React, { createContext, useContext, useEffect, useState } from "react";
-// import {
-//   login as apiLogin,
-//   register as apiRegister,
-//   type AuthResponse,
-// } from "../api/auth";
+// import { login as apiLogin, register as apiRegister } from "../api/auth";
 // import { saveAuth, getToken, getEmail, clearAuth } from "./storage";
-
-// type AuthState = {
-//   token: string | null;
-//   email: string | null;
-//   login(email: string, password: string): Promise<void>;
-//   register(email: string, password: string): Promise<void>;
-//   logout(): void;
-// };
+// import type { AuthResponse, AuthState } from "../types/auth-types";
 
 // const Ctx = createContext<AuthState | null>(null);
 
@@ -21,7 +10,6 @@
 // }) => {
 //   const [token, setToken] = useState<string | null>(null);
 //   const [email, setEmail] = useState<string | null>(null);
-
 //   useEffect(() => {
 //     setToken(getToken());
 //     setEmail(getEmail());
