@@ -16,4 +16,10 @@ export type ChatNewPayload = {
   msg: ChatMessage;
 };
 
+export type ChatTypingPayload = {
+  type: "chat.typing";
+  from: string;
+  isTyping: boolean;
+};
+
 export type Incoming = HelloPayload | ChatNewPayload;

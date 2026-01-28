@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import type { ChatMessage, Incoming } from "../types/chat-types";
+import type {
+  ChatMessage,
+  ChatTypingPayload,
+  Incoming,
+} from "../types/chat-types";
 
 const WS_BASE = "ws://localhost:7777/chat";
 
@@ -8,6 +12,8 @@ export function useChatSocket(token: string | null, email: string | null) {
   const [status, setStatus] = useState<
     "idle" | "connecting" | "open" | "closed"
   >("idle");
+
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const socketRef = useRef<WebSocket | null>(null);
@@ -31,8 +37,16 @@ export function useChatSocket(token: string | null, email: string | null) {
 
         if (data.type === "Websocket is connected successfully") {
           setMessages([...data.chat_history].sort((a, b) => a.at - b.at));
-        } else {
+        } else if (data.type === "chat.new") {
           setMessages((prev) => [...prev, data.msg]);
+        } else {
+          const t = data as ChatTypingPayload;
+          setTypingUsers((prev) => {
+            const others = prev.filter((n) => {
+              n !== t.from;
+            });
+            return t.isTyping ? [...others, t.from] : others;
+          });
         }
       } catch {}
     };
@@ -60,5 +74,12 @@ export function useChatSocket(token: string | null, email: string | null) {
     ws.send(text);
     return true;
   };
-  return { messages, status, error, send };
+
+  const notifyTyping = (isTyping: boolean) => {
+    const ws = socketRef.current;
+    if (!ws || ws.readyState !== WebSocket.OPEN) return;
+    ws.send(JSON.stringify({ type: "typing", isTyping }));
+  };
+
+  return { messages, status, error, send, notifyTyping, typingUsers };
 }
