@@ -15,7 +15,7 @@ export default function ChatPage() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages.length,typingUsers.length]);
+  }, [messages.length, typingUsers.length]);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -73,7 +73,9 @@ export default function ChatPage() {
         })}
 
         {typingUsers.length > 0 && (
-          <div>{typingUsers.join(", ")} đang nhập tin nhắn...</div>
+          <div className="typingIndicator">
+            {typingUsers.join(", ")} đang nhập tin nhắn...
+          </div>
         )}
 
         <div ref={bottomRef} />
