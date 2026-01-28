@@ -15,7 +15,7 @@ export default function ChatPage() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages.length]);
+  }, [messages.length,typingUsers.length]);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
